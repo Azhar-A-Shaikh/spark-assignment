@@ -19,3 +19,22 @@ Once the Kafka connector is set up and configured, start it to begin streaming d
 This can typically be done by running a command that starts the Kafka connector and points it to the configuration file you created earlier.
 Refer to the Kafka connector's documentation for detailed instructions on how to start the connector.
 That's it! Once the Kafka connector is running, it should begin streaming data from the Kafka topic to MongoDB Atlas Cloud. You can monitor the progress of the Kafka connector and view any errors or warnings that may occur in the Kafka connector's logs.
+
+import pymongo
+import pandas as pd
+
+# Define MongoDB Atlas connection string and database/collection names
+mongo_uri = "mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<dbname>?retryWrites=true&w=majority"
+mongo_dbname = "<dbname>"
+mongo_collection = "<collection-name>"
+
+# Connect to MongoDB Atlas using PyMongo
+client = pymongo.MongoClient(mongo_uri)
+db = client[mongo_dbname]
+collection = db[mongo_collection]
+
+# Convert pandas DataFrame to a list of dictionaries for bulk insert
+data = result_df.to_dict(orient='records')
+
+# Insert data into MongoDB Atlas collection
+collection.insert_many(data)
